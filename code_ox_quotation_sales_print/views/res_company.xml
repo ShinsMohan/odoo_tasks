@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_company_form_inherit_report_header_footer" model="ir.ui.view">
+        <field name="name">res.company.form.inherit.report.header.footer</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Report Header Footer">
+                    <group>
+                        <field name="invoice_print_header" widget="image" class="oe_avatar"/>
+                        <field name="invoice_print_footer" widget="image" class="oe_avatar"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

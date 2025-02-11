@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="quotation_sales_print_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="code_ox_quotation_sales_print.custom_header_footer">
+                    <div class="page">
+                        <div class="row mb-4">
+                            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 40%; vertical-align: middle; text-align: left;">
+                                        <img t-if="env.company.invoice_print_header" 
+                                            t-att-src="image_data_uri(env.company.invoice_print_header)" 
+                                            alt="Logo" 
+                                            width="275px" 
+                                            height="150px" 
+                                            style="margin-top:5px;"/>
+                                    </td>
+                                    <td style="width: 60%; text-align: left; vertical-align: bottom;">
+                                        <h1 style="margin-top: 20px;">
+                                            <t t-if="doc.state in ('draft', 'sent')">QUOTATION</t>
+                                            <t t-if="doc.state == 'sale'">SALES ORDER</t>
+                                        </h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <table>
+                            <tr>
+                                <td style="vertical-align: top; padding: 6px;">
+                                    <table style="width: 80%; border-collapse: collapse; border: 1px solid black;">
+                                        <tr>
+                                            <td rowspan="2" style="width: 10%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>To</strong></td>
+                                            <td colspan="3" style="width: 80%; text-align: center; border: 1px solid black; padding: 6px; line-height: 1.5;">
+                                                <strong><t t-esc="doc.partner_id.name"/></strong>
+                                            </td>
+                                            <td rowspan="2" style="width: 10%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>الى</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="width: 80%; text-align: center; border: 1px solid black; padding: 6px; line-height: 1.5;">
+                                                <strong><t t-esc="doc.partner_id.arabic_name"/></strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black; background-color: #EEE; padding: 6px; line-height: 0.7;"><strong>Address Line 1</strong></td>
+                                            <td style="width: 50%; text-align: center; border: 1px solid black; padding: 6px; line-height: 0.7;"><t t-esc="doc.partner_id.street or ''"/></td>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>العنوان - السطر الأول</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>Address Line 2</strong></td>
+                                            <td style="width: 50%; text-align: center; border: 1px solid black; padding: 6px; line-height: 0.7;"><t t-esc="doc.partner_id.street2 or ''"/></td>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black;  padding: 6px;background-color: #EEE; line-height: 0.7;"><strong>العنوان - السطر الثانى</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>VAT No.</strong></td>
+                                            <td style="width: 50%; text-align: center; border: 1px solid black; padding: 6px; line-height: 0.7;"><t t-esc="doc.partner_id.vat or 'No Vat'"/></td>
+                                            <td colspan="2" style="width: 25%; text-align: center; border: 1px solid black; padding: 6px; background-color: #EEE; line-height: 0.7;"><strong>رقم ضريبة القيمة المضافة</strong></td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <t t-if="doc.state in ('draft', 'sent') or doc.state == 'sale'">
+                                    <td style="width: 40%; vertical-align: top; text-align: left; margin-left: 10px; font-size: 20px; line-height: 1.8;">
+                                        <t t-if="doc.state in ('draft', 'sent')">
+                                            <p>
+                                                Expiration Date: <t t-esc="doc.validity_date or ''"/>
+                                                <br/>
+                                                Payment Terms: <t t-esc="doc.payment_term_id.name or ''"/>
+                                            </p>
+                                        </t>
+                                        <t t-if="doc.state == 'sale'">
+                                            <p style="margin-top: 140px;">
+                                                <strong style="border: 2px solid black; padding: 5px;">PO. Number:</strong>
+                                                <span style="width: 100%; border: 2px solid black; padding: 5px; margin-left: -10px">
+                                                    <t t-esc="doc.client_order_ref or 'N/A'"/>
+                                                </span>
+                                            </p>
+                                        </t>
+                                    </td>
+                                </t>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;" border="1">
+                            <thead>
+                                <tr style="background-color: #EEE;">
+                                    <th>S.N#</th>
+                                    <th>Item Code <br/> رمن الصنف </th>
+                                    <th>Description <br/>  الوصف</th>
+                                    <th>Qty <br/> كمية</th>
+                                    <th>Unit Price <br/> سعر الوحدة</th>
+                                    <th>Gross Price <br/> اجملى السعر</th>
+                                    <th>Discount <br/>  قيمة الخصم</th>
+                                    <th>Net W/O VAT <br/> </th>
+                                    <th>VAT Rate <br/> السعر قبل ضريبة <br/> القيمة المضافة</th>
+                                    <th>VAT Amount <br/> القيمة ضريبة</th>
+                                    <th>Total Amount <br/> اجمالي المبل <br/>  المستحق </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="index" t-value="1"/>
+                                <t t-foreach="doc.order_line" t-as="line">
+                                    <tr>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="index"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.product_id.default_code or ''"/></td>
+                                        <td style="padding: 10px;"><t t-esc="line.name"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.product_uom_qty"/></td>
+                                        <td style="width: 8%; text-align: right; padding: 10px;">
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                        <td style="width: 10%; text-align: right; padding: 10px;">
+                                            <span t-field="line.price_subtotal"/>
+                                        </td>
+                                        <td style="text-align: right; padding: 10px;">
+                                            <span t-field="line.discount"/>%
+                                        </td>
+                                        <td style="text-align: right; padding: 10px;"><span t-field="line.price_subtotal"/></td>
+                                        <td style="text-align: center; padding: 10px;">15%</td>
+                                        <td style="text-align: right; padding: 10px;">
+                                            <span t-field="line.price_tax"/> <span t-field="line.currency_id.name"/>
+                                        </td>
+                                        <td style="text-align: right; padding: 10px;">
+                                            <span t-field="line.price_total"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="index" t-value="index + 1"/>
+                                </t>
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 10px;">
+                                            <strong>GRAND TOTAL:</strong>
+                                        </td>
+                                        <td style="text-align: center; padding: 10px;">
+                                            <span t-field="doc.amount_untaxed"/>
+                                        </td>
+                                        <td style="padding: 10px;"></td>
+                                        <td style="text-align: center; padding: 10px;"><span t-field="doc.amount_tax"/></td>
+                                        <td style="text-align: center; padding: 10px;"><span t-field="doc.amount_total"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align: center; padding: 10px;">
+                                            <strong>Amount In Word:</strong>
+                                        </td>
+                                        <td colspan="9" style="text-align: center; padding: 10px;"><t t-esc="doc.currency_id.amount_to_text(doc.amount_total)"/></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong>Address Details:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong><t t-esc="doc.company_id.name or ''"/></strong>
+                                </td>
+                                <td colspan="2" style="text-align: right;">
+                                    <strong><t t-esc="doc.company_id.arabic_name or ''"/></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.street or ''"/>,
+                                </td>
+                                <td colspan="2" style="text-align: right;">
+                                    <t t-esc="doc.company_id.arabic_address or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.city or ''"/> - <t t-esc="doc.company_id.state_id.name or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.country_id.name or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="footer" style="margin-bottom: -10px;">
+                            <img t-if="env.company.invoice_print_footer" t-att-src="image_data_uri(env.company.invoice_print_footer)" alt="Logo" width="100%" style="margin-bottom:50px;"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="quotation_sales_paperformat" model="report.paperformat">
+        <field name="name">Quotation / Sales Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">100</field>
+    </record>
+    
+    <record id="action_quotation_sales_print_pdf" model="ir.actions.report">
+        <field name="name">Quotation / Sales Print</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">code_ox_quotation_sales_print.quotation_sales_print_template</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="code_ox_quotation_sales_print.quotation_sales_paperformat"/>
+    </record>
+
+</odoo>

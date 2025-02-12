@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="marker_visit_print_template">
+        <t t-call="web.html_container">
+            <t t-call="code_ox_market_visit_print.custom_header_footer">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div class="row mb-4">
+                            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 33%; vertical-align: middle; text-align: left;">
+                                        <img t-if="env.company.invoice_print_header" 
+                                            t-att-src="image_data_uri(env.company.invoice_print_header)" 
+                                            alt="Logo" 
+                                            width="275px" 
+                                            height="150px" 
+                                            style="margin-top:5px;"/>
+                                    </td>
+                                    <td style="width: 67%; text-align: left; vertical-align: bottom;">
+                                        <h1 style="margin-top: 20px;">
+                                            MARKET VISIT REPORT
+                                        </h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                            
+                        <table style="width: 100%; border-collapse: collapse; font-size: 18px;">
+                            <tr>
+                                <td style="padding: 10px; text-align: left;"><strong>Company Name</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.partner_id.name"/></td>
+                                <td style="padding: 10px; text-align: left;"><strong>Visit Number:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.name"/></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="padding: 10px; text-align: left;"><strong>Mobile:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.mobile"/></td>
+                                <td style="padding: 10px; text-align: left;"><strong>Date:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="padding: 10px; text-align: left;"><strong>Email:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.email"/></td>
+                                <td style="padding: 10px; text-align: left;"><strong>Status:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="dict(doc._fields['status'].selection).get(doc.status)"/></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="padding: 10px; text-align: left;"><strong>Website</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.website"/></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="padding: 10px; text-align: left;"><strong>Address:</strong></td>
+                                <td style="padding: 10px; text-align: left;"><span t-esc="doc.street"/></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                                <td style="padding: 10px; text-align: left;"></td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;" border="1">
+                            <thead>
+                                <tr style="background-color: #EEE;">
+                                    <th style="padding: 5px;">S.N#</th>
+                                    <th style="padding: 5px;">Product Name</th>
+                                    <th style="padding: 5px;">Category</th>
+                                    <th style="padding: 5px;">Packaging Quantity</th>
+                                    <th style="padding: 5px;">Unit of Measure</th>
+                                    <th style="padding: 5px;">Item Number</th>
+                                    <th style="padding: 5px;">Size</th>
+                                    <th style="padding: 5px;">Color</th>
+                                    <th style="padding: 5px;">Cost</th>
+                                    <th style="padding: 5px;">Additional Cost</th>
+                                    <th style="padding: 5px;">Description</th>
+                                    <th style="padding: 5px;">County of Origin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="index" t-value="1"/>
+                                <t t-foreach="doc.market_visit_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="index"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.product_name or ''"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.product_category_id.name or ''"/></td>
+                                        <td style="width:5%; text-align: center; padding: 10px;"><t t-esc="line.packaging_qty.name"/></td>
+                                        <td style="width:5%; text-align: center; padding: 10px;"><t t-esc="line.uom_id.name"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.item_number"/></td>
+                                        <td style="padding: 10px;"><t t-esc="line.size"/></td>
+                                        <td style="padding: 10px;"><t t-esc="line.color"/></td>
+                                        <td style="text-align: right; padding: 10px;"><span t-field="line.cost" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                        <td style="text-align: right; padding: 10px;"><span t-field="line.additional_cost" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                        <td style="width:20%; padding: 10px;"><t t-esc="line.description"/></td>
+                                        <td style="text-align: center; padding: 10px;"><t t-esc="line.country_id.name"/></td>
+                                    </tr>
+                                    <t t-set="index" t-value="index + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td style="text-align: left; padding-top: 20px;"><strong>Description: </strong><t t-esc="doc.description"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong>Address Details:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong><t t-esc="doc.company_id.name or ''"/></strong>
+                                </td>
+                                <td colspan="2" style="text-align: right;">
+                                    <strong><t t-esc="doc.company_id.arabic_name or ''"/></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.street or ''"/>,
+                                </td>
+                                <td colspan="2" style="text-align: right;">
+                                    <t t-esc="doc.company_id.arabic_address or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.city or ''"/> - <t t-esc="doc.company_id.state_id.name or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.country_id.name or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="footer" style="margin-bottom: -10px;">
+                            <img t-if="env.company.invoice_print_footer" t-att-src="image_data_uri(env.company.invoice_print_footer)" alt="Logo" width="100%" style="margin-bottom:50px;"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="market_visit_paperformat" model="report.paperformat">
+        <field name="name">Market Visit Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">100</field>
+    </record>
+    
+    <record id="action_market_visit_print_pdf" model="ir.actions.report">
+        <field name="name">Market Visit Print</field>
+        <field name="model">market.visit</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">code_ox_market_visit_print.marker_visit_print_template</field>
+        <field name="binding_model_id" ref="market_visit.model_market_visit"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="code_ox_market_visit_print.market_visit_paperformat"/>
+    </record>
+
+</odoo>

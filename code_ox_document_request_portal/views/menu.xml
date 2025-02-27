@@ -1,0 +1,54 @@
+<odoo>
+
+    <record id="view_document_request_form" model="ir.ui.view">
+        <field name="name">document.request.form</field>
+        <field name="model">document.request</field>
+        <field name="arch" type="xml">
+            <form string="Document Request">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval,approved,rejected"/>
+
+                    <button name="action_submit_for_approval" type="object" string="Submit for Approval"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+
+                    <button name="action_approve" type="object" string="Approve"
+                            class="btn-primary" invisible="state != 'waiting_approval'"/>
+
+                    <button name="action_reject" type="object" string="Reject"
+                            class="btn-danger" invisible="state != 'waiting_approval'"/>
+
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                        class="btn-secondary" invisible="state not in ('approved', 'rejected')"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="description" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="attachment_ids" widget="many2many_binary" invisible="state != 'approved'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_document_request" model="ir.actions.act_window">
+        <field name="name">Document Requests</field>
+        <field name="res_model">document.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_document_request_root" 
+            name="Document Requests" 
+            sequence="30"
+            web_icon="/code_ox_document_request_portal/static/description/images/document_icon.png"
+            action="action_document_request"
+            groups="base.group_user"/>
+</odoo>

@@ -1,0 +1,66 @@
+<odoo>
+    <template id="portal_document_request_detail" name="Document Request Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'document_request_detail'"/>
+            
+            <div class="container mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Document Request Details</h1>
+                    <a href="/my/document_requests" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"/> Back to List
+                    </a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h4 t-esc="document.name"/>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Status:</strong>
+                                <span t-if="document.state == 'draft'" class="badge bg-secondary">Draft</span>
+                                <span t-elif="document.state == 'waiting_approval'" class="badge bg-warning">Waiting for Approval</span>
+                                <span t-elif="document.state == 'approved'" class="badge bg-success">Approved</span>
+                                <span t-elif="document.state == 'rejected'" class="badge bg-danger">Rejected</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Applicant:</strong> <span t-esc="document.user_id.name"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Created On:</strong> <span t-esc="document.create_date" t-options='{"widget": "datetime"}'/>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Last Updated:</strong> <span t-esc="document.write_date" t-options='{"widget": "datetime"}'/>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5>Description</h5>
+                            <div class="border p-3 bg-light">
+                                <p t-esc="document.description or 'No description provided.'" style="white-space: pre-wrap;"/>
+                            </div>
+                        </div>
+                        
+                        <t t-if="document.state == 'approved' and document.attachment_ids">
+                            <div class="mt-4">
+                                <h5>Attachments</h5>
+                                <div class="list-group">
+                                    <t t-foreach="document.attachment_ids" t-as="attachment">
+                                        <a t-att-href="'/web/content/%s?download=true' % attachment.id" 
+                                        class="list-group-item list-group-item-action">
+                                            <i class="fa fa-download"/> <t t-esc="attachment.name"/>
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

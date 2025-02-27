@@ -1,0 +1,56 @@
+<odoo>
+    <!-- <template id="portal_my_home_document_request" name="Document Request" inherit_id="portal.portal_my_home" priority="61">
+        <xpath expr="//div[@id='portal_client_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Document Request</t>
+                <t t-set="text">Request and manage your documents</t>
+                <t t-set="url" t-value="'/my/document_requests'"/>
+            </t>
+        </xpath>
+    </template> -->
+
+    <!-- <template id="portal_my_home_document_request" name="Show Document Request" inherit_id="portal.portal_my_home">
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/helpdesk/static/src/img/tickets.svg'"/>
+                <t t-set="title">Document Request</t>
+                <t t-set="text">Request and manage your documents</t>
+                <t t-set="url" t-value="'/my/document_requests'"/>
+            </t>
+        </div>
+    </template> -->
+
+    <!-- <template id="portal_my_home_document_request" name="Document Request" inherit_id="portal.portal_my_home" priority="61">
+        <xpath expr="//div[@id='portal_client_category']/t[@t-call='portal.portal_docs_entry'][1]" position="after">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Document Request</t>
+                <t t-set="text">Request and manage your documents</t>
+                <t t-set="url" t-value="'/my/document_requests'"/>
+            </t>
+        </xpath>
+    </template> -->
+
+    <!-- <template id="portal_my_home_document_request" name="Document Request" customize_show="True" inherit_id="portal.portal_my_home" priority="61">
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/purchase/static/src/img/rfq.svg'"/>
+                <t t-set="title">Document Request</t>
+                <t t-set="text">Request and manage your documents</t>
+                <t t-set="url" t-value="'/my/document_requests'"/>
+            </t>
+        </div>
+    </template> -->
+
+    <template id="portal_my_home_document_request" name="Document Request" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[@id='portal_vendor_category']" position="before">
+                <div class="o_portal_category row g-2 mt-3" id="portal_payslip_category">
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="title">Document Request</t>
+                        <t t-set="url" t-value="'/my/document_requests'"/>
+                        <t t-set="text">Request and manage your documents</t>
+                        <t t-set="placeholder_count" t-value="'payslip_count'"/>
+                    </t>
+                </div>
+        </xpath>
+    </template>
+</odoo>

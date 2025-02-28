@@ -1,0 +1,89 @@
+<!-- portal_my_document_requests_template.xml -->
+<odoo>
+    <template id="portal_my_document_requests_template" name="My Document Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'document_requests'"/>
+            
+            <div class="container mt-4">
+                <h1>My Document Requests</h1>
+                
+                <t t-if="not document_requests">
+                    <div class="alert alert-info">
+                        <p>You don't have any document requests.</p>
+                    </div>
+                </t>
+                
+                <div class="mb-3">
+                    <a href="/my/document_requests/new" class="btn btn-primary">
+                        New Document Request
+                    </a>
+                </div>
+                
+                <t t-if="document_requests">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Applicant</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="document_requests" t-as="doc">
+                                <tr class="clickable-row" t-attf-onclick="window.location='/my/document_requests/#{doc.id}';" style="cursor: pointer;">
+                                    <td t-esc="doc.name"/>
+                                    <td t-esc="doc.user_id.name"/>
+                                    <td t-esc="doc.create_date" t-options='{"widget": "date"}'/>
+                                    <td>
+                                        <span t-if="doc.state == 'draft'" class="badge bg-secondary">
+                                            Draft
+                                        </span>
+                                        <span t-elif="doc.state == 'waiting_approval'" class="badge bg-warning">
+                                            Waiting for Approval
+                                        </span>
+                                        <span t-elif="doc.state == 'approved'" class="badge bg-success">
+                                            Approved
+                                        </span>
+                                        <span t-elif="doc.state == 'rejected'" class="badge bg-danger">
+                                            Rejected
+                                        </span>
+                                        <span t-else="" class="badge bg-info" t-esc="doc.state"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_new_document_request_form" name="New Document Request">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'new_document_request'"/>
+            
+            <div class="container mt-4">
+                <h1>Request a Document</h1>
+                <form action="/my/document_requests/submit" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    
+                    <div class="form-group mb-3">
+                        <label for="name">Document Name</label>
+                        <input type="text" name="name" id="name" required="required" class="form-control"/>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="description">Reason for Request</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="d-flex mt-4">
+                        <button type="submit" class="btn btn-primary me-2">Submit Request</button>
+                        <a href="/my/document_requests" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

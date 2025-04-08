@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="CustomPivotViewButtons" t-inherit="web.PivotView.Buttons" t-inherit-mode="extension">
+        <xpath expr="//button[@class='btn btn-secondary fa fa-download o_pivot_download']" position="after">
+            <button class="btn btn-secondary fa fa-download o_pivot_custom_excel" t-on-click="downloadCustomExcel" data-tooltip="Download Custom Excel" aria-label="Download Custom Excel" t-attf-disabled="{{noDataDisplayed ? 'disabled' : false}}"/>
+        </xpath>
+    </t>
+
+</templates>
